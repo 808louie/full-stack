@@ -8,16 +8,23 @@ namespace EComm.Controllers;
 public class ProductController(Repository db) : ControllerBase
 {
     [HttpGet("products")]
-    public List<Product> GetAllProducts()
+    public async Task<List<Product>> GetAllProducts()
     {
-        var products = db.GetAllProducts();
+        var products = await db.GetAllProducts();
         return products;
     }
 
     [HttpGet("product/{id}")]
-    public Product GetProduct(int id)
+    public async Task<IActionResult> GetProduct(int id)
     {
-        var product = db.GetProduct(id);
-        return product;
+        var product = await db.GetProduct(id);
+        if (product is null) return NotFound();
+        return Ok(product);
+    }
+
+    [HttpPatch("product/{id}")]
+    public async Task<IActionResult> UpdateProduct(Product product)
+    {
+        // update the name of the product with an id of {id}
     }
 }
